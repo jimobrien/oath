@@ -10,18 +10,18 @@ var promiseTimeout = function (func, time) {
   var defer = oath.defer();
   setTimeout( function () {
     defer.resolve(func());
+    console.log(defer.promise, 'resolved')
   }, time);
   return defer.promise;
 };
 
 describe('oath', function () {
-  describe('Promise', function () {
+  xdescribe('Promise', function () {
     describe('.then', function () {
       it('should call then on a promise resolution', function (done) {
 
         promiseTimeout(function () {}, 5)
           .then(function (data) {
-            console.log(data, 'invoked success');
             done();
           });
       });
@@ -63,8 +63,10 @@ describe('oath', function () {
           }, 5);
           return defer.promise;
         };
+
         failingPromise()
           .catch(function (err) {
+            console.log(err, 'should call catch with the error passed to .reject');
             expect(err).to.equal('Oh no!');
             done();
           });
@@ -72,7 +74,7 @@ describe('oath', function () {
     });
   });
 
-  describe('promisify', function () {
+  xdescribe('promisify', function () {
     var bigEnough = 100;
     var tooSmall = 10;
     var nodeStyle = function (num, callback) {
@@ -121,6 +123,7 @@ describe('oath', function () {
         expect(num).to.equal(130);
         done();
       });
+      console.log(step1(100).then(step2), 'then')
     });
 
     it('should jump directly to catch if an error is thrown during chaining', function (done) {
