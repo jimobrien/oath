@@ -8,7 +8,7 @@ oath.promisify = oath.promisify || function () {};
 
 var promiseTimeout = function (func, time) {
   var defer = oath.defer();
-  setTimeout(function () {
+  setTimeout( function () {
     defer.resolve(func());
   }, time);
   return defer.promise;
@@ -18,8 +18,12 @@ describe('oath', function () {
   describe('Promise', function () {
     describe('.then', function () {
       it('should call then on a promise resolution', function (done) {
+
         promiseTimeout(function () {}, 5)
-          .then(done);
+          .then(function (data) {
+            console.log(data, 'invoked success');
+            done();
+          });
       });
 
       it('should pass a resolved value to then', function (done) {
