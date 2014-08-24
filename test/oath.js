@@ -10,13 +10,12 @@ var promiseTimeout = function (func, time) {
   var defer = oath.defer();
   setTimeout( function () {
     defer.resolve(func());
-    console.log(defer.promise, 'resolved')
   }, time);
   return defer.promise;
 };
 
 describe('oath', function () {
-  xdescribe('Promise', function () {
+  describe('Promise', function () {
     describe('.then', function () {
       it('should call then on a promise resolution', function (done) {
 
@@ -74,21 +73,22 @@ describe('oath', function () {
     });
   });
 
-  xdescribe('promisify', function () {
+  describe('promisify', function () {
     var bigEnough = 100;
     var tooSmall = 10;
     var nodeStyle = function (num, callback) {
       setTimeout(function () {
         if (num > 50) {
-          callback(null, 'That\'s a big number!');
+          callback('That\'s a big number!', null); // these args were flipped
         } else {
-          callback('Not big enough!', null);
+          callback(null, 'Not big enough!'); // these args were flipped
         }
       });
     };
 
     var promised = oath.promisify(nodeStyle);
-    xit('should call then on success', function (done) {
+    
+    it('should call then on success', function (done) {
       promised(bigEnough)
         .then(function (message) {
           expect(message).to.equal('That\'s a big number!');
@@ -96,7 +96,7 @@ describe('oath', function () {
         });
     });
 
-    xit('should call catch on error', function (done) {
+    it('should call catch on error', function (done) {
       promised(tooSmall)
         .catch(function (message) {
           expect(message).to.equal('Not big enough!');
@@ -119,11 +119,12 @@ describe('oath', function () {
         }, 5);
       };
 
+
       step1(100).then(step2).then(function (num) {
         expect(num).to.equal(130);
         done();
       });
-      console.log(step1(100).then(step2), 'then')
+
     });
 
     it('should jump directly to catch if an error is thrown during chaining', function (done) {
